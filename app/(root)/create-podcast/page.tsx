@@ -30,13 +30,13 @@ import GeneratePodcast from "@/components/GeneratePodcast"
 import GenerateThumbnail from "@/components/GenerateThumbnail"
 import { Loader } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { Id } from "@/convex/_generated/dataModel"
 
 const voiceCategories = ['alloy', 'shimmer', 'nova', 'echo', 'fable', 'onyx']
 
 const formSchema = z.object({
-    username: z.string().min(2, {
-        message: "Username must be at least 2 characters.",
-    }),
+    podcastTitle: z.string().min(2),
+    podcastDescription: z.string().min(2),
 })
 
 const CreatePodcast = () => {
@@ -81,8 +81,8 @@ const CreatePodcast = () => {
                             name="podcastTitle"
                             render={({ field }) => (
                                 <FormItem className="flex flex-col gap-2.5">
-                                    <FormLabel className="text-16 font-bold text-white-1">Username</FormLabel>
-                                    <FormControl className="input-class focus-visible:ring-orange-1">
+                                    <FormLabel className="text-16 font-bold text-white-1">Title</FormLabel>
+                                    <FormControl className="input-class focus-visible:ring-offset-orange-1">
                                         <Input placeholder="Vint Podcastr" {...field} />
                                     </FormControl>
 
@@ -93,7 +93,7 @@ const CreatePodcast = () => {
                         <div className="flex flex-col gap-2.5">
                             <Label className="text-16 font-bold text-white-1">Select AI Voice</Label>
                             <Select onValueChange={(value) => setVoiceType(value)}>
-                                <SelectTrigger className={cn('text-16 w-full border-none bg-black-1 text-gray-1')}>
+                                <SelectTrigger className={cn('text-16 w-full border-none focus-visible:ring-offset-orange-1 bg-black-1 text-gray-1')}>
                                     <SelectValue placeholder="Select AI Voice" className="placeholder:text-gray-1" />
                                 </SelectTrigger>
                                 <SelectContent className="text-16 border-none bg-black-1 font-bold text-white-1 focus:ring-orange-1">
@@ -119,7 +119,7 @@ const CreatePodcast = () => {
                             render={({ field }) => (
                                 <FormItem className="flex flex-col gap-2.5">
                                     <FormLabel className="text-16 font-bold text-white-1">Description</FormLabel>
-                                    <FormControl className="input-class focus-visible:ring-orange-1">
+                                    <FormControl className="input-class focus-visible:ring-offset-orange-1">
                                         <Textarea placeholder="Write a short podcast description" {...field} />
                                     </FormControl>
 
@@ -129,7 +129,15 @@ const CreatePodcast = () => {
                         />
                     </div>
                     <div className="flex flex-col pt-10">
-                        <GeneratePodcast />
+                        <GeneratePodcast
+                            setAudioStorageId={setAudioStorageId}
+                            setAudio={setAudioUrl}
+                            voiceType={voiceType}
+                            audio={audioUrl}
+                            voicePrompt={voicePrompt}
+                            setVoicePrompt={setVoicePrompt}
+                            setAudioDuration={setAudioDuration}
+                        />
 
                         <GenerateThumbnail />
                         <div className="mt-10 w-full">
